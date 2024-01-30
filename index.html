@@ -1,34 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Mostrar Contenido de Otra Página</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta a través de CORS Anywhere</title>
 </head>
 <body>
-    <h1>Contenido de Otra Página</h1>
-    <div id="contenido"></div>
+  <h1>Respuesta del servidor:</h1>
+  <pre id="respuesta"></pre>
 
-    <script>
-        // Realizar una solicitud GET a la URL deseada
-        var solicitud = new XMLHttpRequest();
-        solicitud.open('GET', 'http://idube.ddns.net/termometro.php?opc=1', true);
+  <script>
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = 'http://idube.ddns.net/termometro.php?opc=1';
 
-        solicitud.onload = function() {
-            if (solicitud.status >= 200 && solicitud.status < 400) {
-                // La solicitud fue exitosa, mostrar el contenido recuperado
-                var respuesta = solicitud.responseText;
-                document.getElementById('contenido').innerHTML = respuesta;
-            } else {
-                // Hubo un error en la solicitud
-                document.getElementById('contenido').innerHTML = "Error al cargar la página.";
-            }
-        };
-
-        solicitud.onerror = function() {
-            // Hubo un error de red
-            document.getElementById('contenido').innerHTML = "Error de conexión.";
-        };
-
-        solicitud.send();
-    </script>
+    fetch(proxyUrl + targetUrl)
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('respuesta').innerText = data;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('respuesta').innerText = 'Error al realizar la solicitud.';
+      });
+  </script>
 </body>
 </html>
